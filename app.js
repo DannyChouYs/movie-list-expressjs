@@ -35,6 +35,22 @@ app.get('/movie/:movie_id', (req, res) => {
   res.render('show', { movie: movie })
 })
 
+// search page 
+app.get('/search', (req, res) => {
+  console.log('req.query', req.query)
+  const keyword = req.query.keyword
+  // 判斷keyword === ''，則顯示全部電影
+  if (keyword !== '') {
+    const movies = movieList.results.filter(movie => {
+      return movie.title.toLocaleLowerCase().includes(keyword.toLowerCase())
+    })
+    // keyword帶入template
+    res.render('index', { movies: movies, keyword: keyword })
+  } else {
+    res.render('index', { movies: movieList.results })
+  }
+})
+
 app.listen(port, () =>{
   console.log(`server is running on http://localhost:${port}`)
 })
